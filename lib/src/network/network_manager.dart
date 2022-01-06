@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:citymapper/src/network/model/extensions.dart';
 import 'package:citymapper/src/network/model/request/location_request.dart';
 import 'package:citymapper/src/network/model/request/travel_time_type_request.dart';
+import 'package:citymapper/src/network/model/request/walking_directions_profiles.dart';
 import 'package:citymapper/src/network/model/response/travel_times_response.dart';
+import 'package:citymapper/src/network/model/response/walking_directions_reponse.dart';
 import 'package:citymapper/src/network/utils/network_uri_builder.dart';
 import 'package:citymapper/src/network/utils/network_utils.dart';
 import 'package:http/http.dart' as http;
@@ -31,6 +33,33 @@ class NetworkManager {
 
     http.Response response = await _sendGetRequest(builder);
     return TravelTimesResponse.fromJson(jsonDecode(response.body));
+  }
+
+  Future<WalkingDirectionsResponse> walkingDirections(
+    LocationRequest start,
+    LocationRequest end, {
+    String? language,
+    Set<WalkingDirectionsProfile>? profiles,
+    String? rerouteSignature,
+  }) async {
+    URIBuilder builder = URIBuilder(_baseUrl, _basePath, 'directions/walk')
+      ..addQuery('start', start)
+      ..addQuery('end', end);
+
+    if (language?.isNotEmpty == true) {
+      builder.addQuery('language', language);
+    }
+
+    if (profiles?.isNotEmpty == true) {
+      builder.addQuery('profiles', profiles!.map((e) => e.value).join(','));
+    }
+
+    if (rerouteSignature?.isNotEmpty == true) {
+      builder.addQuery('reroute_signature', rerouteSignature);
+    }
+
+    http.Response response = await _sendGetRequest(builder);
+    return WalkingDirectionsResponse.fromJson(jsonDecode(response.body));
   }
 
   Future<http.Response> _sendGetRequest(URIBuilder builder) {

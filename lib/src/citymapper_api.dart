@@ -1,7 +1,9 @@
 import 'package:citymapper/src/common/citymapper_api_interface.dart';
 import 'package:citymapper/src/network/model/request/location_request.dart';
 import 'package:citymapper/src/network/model/request/travel_time_type_request.dart';
+import 'package:citymapper/src/network/model/request/walking_directions_profiles.dart';
 import 'package:citymapper/src/network/model/response/travel_times_response.dart';
+import 'package:citymapper/src/network/model/response/walking_directions_reponse.dart';
 import 'package:citymapper/src/network/network_manager.dart';
 
 export 'package:citymapper/src/common/model/location.dart';
@@ -47,5 +49,29 @@ class _CityMapperAPIInstance implements CityMapperAPIInterface {
         if (motorScooterTravelTime) TravelTimeTypeRequest.motorScooter,
       },
     ).then((TravelTimesResponse value) => value.toTravelTimes());
+  }
+
+  // TODO Changer type
+  // @override
+  Future<WalkingDirectionsResponse> walkingDirections(
+    Location start,
+    Location end, {
+    String? language,
+    bool? fastProfile = true,
+    bool? mainRoadsProfile,
+    String? rerouteSignature,
+  }) {
+    return _manager
+        .walkingDirections(
+          LocationRequest.fromLocation(start),
+          LocationRequest.fromLocation(end),
+          language: language,
+          profiles: {
+            if (fastProfile == true) WalkingDirectionsProfile.fast,
+            if (mainRoadsProfile == true) WalkingDirectionsProfile.mainRoads
+          },
+          rerouteSignature: rerouteSignature,
+        )
+        .then((WalkingDirectionsResponse value) => value);
   }
 }

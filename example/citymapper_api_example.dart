@@ -20,4 +20,17 @@ void main() async {
     scooterTravelTime: true,
     motorScooterTravelTime: false,
   );
+
+  var walkingDirectionsResponse = await api.walkingDirections(
+    Location(
+      latitude: 51.525246,
+      longitude: 0.084672,
+    ),
+    Location(
+      latitude: 51.559098,
+      longitude: 0.074503,
+    ),
+  );
+
+  print(walkingDirectionsResponse.routes);
 }
