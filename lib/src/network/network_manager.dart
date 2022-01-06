@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 
 class NetworkManager {
   static final String _baseUrl = 'https://api.external.citymapper.com/';
-  static final String _basePath = '/api/1';
+  static final String _basePath = '/api/1/';
 
   final String apiKey;
 

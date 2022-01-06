@@ -1,11 +1,11 @@
 import 'package:citymapper/citymapper.dart';
 
 void main() async {
-  var api = await CityMapperAPI.get(
+  var api = CityMapperAPI.get(
     'QGW8fQFCyHv7Sk8FRtHk4G8XfY7WL8iW',
   );
 
-  var travelTimes = api.travelTimes(
+  var travelTimes = await api.travelTimes(
     Location(
       latitude: 51.525246,
       longitude: 0.084672,
@@ -20,6 +20,9 @@ void main() async {
     scooterTravelTime: true,
     motorScooterTravelTime: false,
   );
+
+  print(travelTimes.transitTimeMinutes);
+  print(travelTimes.motorsScooterTimeMinutes);
 
   var walkingDirectionsResponse = await api.walkingDirections(
     Location(
